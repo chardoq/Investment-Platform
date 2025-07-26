@@ -14,6 +14,9 @@ from streamlit_option_menu import option_menu
 import warnings
 warnings.filterwarnings('ignore')
 
+# Import our robust data fetcher
+from data_fetcher import fetch_stock_data_safe, fetch_company_info_safe, fetch_multiple_stocks_safe
+
 # Page configuration
 st.set_page_config(
     page_title="Investment Analysis Dashboard",
@@ -65,30 +68,19 @@ class InvestmentAnalyzer:
         self.risk_free_rate = 0.02  # 2% risk-free rate
     
     def get_stock_data(self, symbols, period="1y"):
-        """Fetch stock data for given symbols"""
-        try:
-            if isinstance(symbols, str):
-                symbols = [symbols]
-            
-            data = {}
-            for symbol in symbols:
-                ticker = yf.Ticker(symbol)
-                hist = ticker.history(period=period)
-                if not hist.empty:
-                    data[symbol] = hist
-            return data
-        except Exception as e:
-            st.error(f"Error fetching data: {str(e)}")
-            return {}
+        """Fetch stock data for given symbols using robust data fetcher"""
+        if isinstance(symbols, str):
+            symbols = [symbols]
+        
+        if len(symbols) == 1:
+            data = fetch_stock_data_safe(symbols[0], period)
+            return {symbols[0]: data} if not data.empty else {}
+        else:
+            return fetch_multiple_stocks_safe(symbols, period)
     
     def get_company_info(self, symbol):
-        """Get company information"""
-        try:
-            ticker = yf.Ticker(symbol)
-            info = ticker.info
-            return info
-        except:
-            return {}
+        """Get company information using robust data fetcher"""
+        return fetch_company_info_safe(symbol)
     
     def calculate_returns(self, data):
         """Calculate various return metrics"""

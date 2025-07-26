@@ -38,20 +38,49 @@ A comprehensive Streamlit-based investment analysis dashboard that helps analyze
    cd investment-dashboard
    ```
 
-2. **Install required dependencies:**
+2. **Setup Virtual Environment** (Recommended):
    ```bash
+   python3 -m venv investment_env
+   source investment_env/bin/activate  # On Windows: investment_env\Scripts\activate
+   ```
+
+3. **Install required dependencies:**
+   ```bash
+   pip install --upgrade pip
    pip install -r requirements.txt
    ```
 
-3. **Run the dashboard:**
+4. **Test Installation** (Optional):
    ```bash
-   streamlit run investment_dashboard.py
+   python test_dashboard.py
    ```
 
-4. **Open your browser and navigate to:**
+5. **Run the dashboard:**
+   ```bash
+   streamlit run investment_dashboard.py
+   # OR use the launcher script:
+   ./launch_dashboard.sh
+   ```
+
+6. **Open your browser and navigate to:**
    ```
    http://localhost:8501
    ```
+
+## 🔧 Troubleshooting
+
+### Data Fetching Issues
+The dashboard includes a robust data fetcher with automatic retries and error handling. If you encounter data fetching issues:
+
+1. **Upgrade yfinance**: `pip install --upgrade yfinance`
+2. **Check internet connection**
+3. **Verify stock symbols** - some may be delisted or invalid
+4. **Run test script**: `python test_dashboard.py` to diagnose issues
+
+### Common Solutions
+- **"No data found" errors**: Usually due to Yahoo Finance API limits or delisted stocks
+- **Connection timeouts**: The dashboard automatically retries failed requests
+- **Invalid symbols**: The system gracefully handles invalid stock symbols
 
 ## 📦 Dependencies
 
